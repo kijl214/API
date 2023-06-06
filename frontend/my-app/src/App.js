@@ -6,6 +6,8 @@ import Login from './page/Login'
 import SignUp from './page/SignUp'
 import Create from './page/create_cat'
 import About from './page/About_cat'
+import Update from './page/Update_cat'
+import Delete from './page/Delete_cat'
 function App() {
   return (
     <Router>
@@ -37,6 +39,16 @@ function App() {
                     Create Cat
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/update-cat'}>
+                    Update Cat
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/delete-cat'}>
+                    Delete Cat
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -49,6 +61,8 @@ function App() {
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/create-cat" element={<Create />} />
               <Route path="/about-cat" element={<About />} />
+              <Route path="/update-cat" element={<Update />} />
+              <Route path="/delete-cat" element={<Delete />} />
             </Routes>
           </div>
         </div>
