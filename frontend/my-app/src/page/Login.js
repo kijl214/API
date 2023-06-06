@@ -70,7 +70,7 @@ const Login = () => {
         </button>
       </div>
       <p className="forgot-password text-right">
-        Forgot <a href="#">password?</a>
+        Forgot password?
       </p>
     </form>
   );

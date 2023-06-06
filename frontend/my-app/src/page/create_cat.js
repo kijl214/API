@@ -33,7 +33,7 @@ const Create_cat = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="firstName">Age</label>
-          <input type="text" className="form-control" placeholder="cat age" value={age} onChange={e => setAge(e.target.value)} />       
+          <input type="number" className="form-control" placeholder="cat age" value={age} onChange={e => setAge(parseInt(e.target.value))} />      
         </div>
         <div className="mb-3">
           <label htmlFor="firstName">Breed</label>
