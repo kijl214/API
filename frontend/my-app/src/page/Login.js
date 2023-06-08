@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
+const Login = ({handleLogin}) => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -21,22 +23,49 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Call the API to log in the user with the email and password
-    navigate('/');
+
+    try {
+      // Send a POST request to the server to log in the user
+      const response = await axios.post('http://localhost:3001/staff/login', {
+        username,
+        password
+      });
+
+      // If the login is successful, save the token and user data to local storage
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      // If the "remember me" checkbox is checked, save the token and user data to session storage
+      if (rememberMe) {
+        sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+      handleLogin();
+      // Navigate the user to the home page
+      navigate('/create-cat');
+    } catch (error) {
+      // If there's an error, set the error state to display the error message to the user
+      setError(error.response.data.error);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h3>Login</h3>
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       <div className="mb-3">
-        <label htmlFor="email">Email address</label>
+        <label htmlFor="username">Username</label>
         <input
-          type="email"
+          type="text"
           className="form-control"
-          id="email"
-          value={email}
-          onChange={handleEmailChange}
-          placeholder="Enter email"
+          id="username"
+          value={username}
+          onChange={handleUsernameChange}
+          placeholder="Enter username"
         />
       </div>
       <div className="mb-3">
@@ -70,7 +99,7 @@ const Login = () => {
         </button>
       </div>
       <p className="forgot-password text-right">
-        Forgot password?
+        Forgot <a href="/forgot-password">password?</a>
       </p>
     </form>
   );

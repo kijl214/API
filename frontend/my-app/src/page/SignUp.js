@@ -1,58 +1,57 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const handleFirstNameChange = (event) => {
-    setFirstName(event.target.value);
-  };
-
-  const handleLastNameChange = (event) => {
-    setLastName(event.target.value);
-  };
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Call the API to sign up the user with the first name, last name, email, and password
-    navigate('/sign-in');
+
+    // Make sure the passwords match
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    // Call the API to sign up the staff member with the username, email, password, and code
+    try {
+      await axios.put('http://localhost:3001/staff/signup', {
+        username,
+        email,
+        password,
+        code
+      });
+
+      navigate('/sign-in');
+    } catch (error) {
+      setError(error.response.data.error);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       <div className="mb-3">
-        <label htmlFor="firstName">First name</label>
+        <label htmlFor="username">Username</label>
         <input
           type="text"
           className="form-control"
-          id="firstName"
-          value={firstName}
-          onChange={handleFirstNameChange}
-          placeholder="First name"
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="lastName">Last name</label>
-        <input
-          type="text"
-          className="form-control"
-          id="lastName"
-          value={lastName}
-          onChange={handleLastNameChange}
-          placeholder="Last name"
+          id="username"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+          placeholder="Username"
         />
       </div>
       <div className="mb-3">
@@ -62,7 +61,7 @@ const SignUp = () => {
           className="form-control"
           id="email"
           value={email}
-          onChange={handleEmailChange}
+          onChange={(event) => setEmail(event.target.value)}
           placeholder="Enter email"
         />
       </div>
@@ -73,8 +72,30 @@ const SignUp = () => {
           className="form-control"
           id="password"
           value={password}
-          onChange={handlePasswordChange}
+          onChange={(event) => setPassword(event.target.value)}
           placeholder="Enter password"
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          className="form-control"
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={(event) => setConfirmPassword(event.target.value)}
+          placeholder="Confirm password"
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="code">Verification Code</label>
+        <input
+          type="text"
+          className="form-control"
+          id="code"
+          value={code}
+          onChange={(event) => setCode(event.target.value)}
+          placeholder="Enter verification code"
         />
       </div>
       <div className="d-grid">
