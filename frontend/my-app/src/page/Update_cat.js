@@ -78,6 +78,10 @@ const UpdateCat = () => {
                 <label htmlFor="firstName">Breed</label>
                 <input type="text" className="form-control" placeholder="cat breed" value={breed} onChange={e => setBreed(e.target.value)} />       
               </div>
+
+
+
+              
               <div className="d-grid">
                 <button type="submit" className="btn btn-primary">
                   Update Cat

@@ -40,6 +40,21 @@ const About_cat = () => {
   // Get a list of unique cat breeds for the breed select list
   const uniqueBreeds = [...new Set(cats.map(cat => cat.breed))];
 
+
+  // Convert the selected file to base64
+  function convertFile(files: FileList | null) {
+
+      const fileRef = files[0] || '';
+      const fileType: string = fileRef.type || '';
+      console.log('This file upload is of type:', fileType);
+      const reader = new FileReader();
+      reader.readAsBinaryString(fileRef);
+      reader.onload = (ev: any) => {
+        // convert it to base64
+        return(`data:${fileType};base64,${btoa(ev.target.result)}`);
+      };
+  }
+
   return (
     <div>
       <h1>Cats</h1>
@@ -70,11 +85,19 @@ const About_cat = () => {
         {filteredCats.map(cat => (
           <li key={cat.id}>
             <table>
+            <thead>
+            <tr>
+                <th><img src={cat.picture} alt="cat" style={{ maxWidth: '200px' }} /></th>
+            </tr>
+            </thead>
               <tbody>
                 <tr><td>No:</td><td>{cat.id}</td></tr>
                 <tr><td>Name:</td><td>{cat.name}</td></tr>
                 <tr><td>Years old:</td><td>{cat.age}</td></tr>
                 <tr><td>Breed:</td><td>{cat.breed}</td></tr>
+                <tr>
+
+                </tr>
               </tbody>
             </table>
           </li>
@@ -82,6 +105,10 @@ const About_cat = () => {
       </ul>
     </div>
   );
-}
+};
 
 export default About_cat;
+
+
+
+

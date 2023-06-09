@@ -1,76 +1,58 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Create_cat = () => {
-  const [cats, setCats] = useState([]);
+function AddCat() {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [breed, setBreed] = useState('');
+  const [image, setImage] = useState(null);
 
-  // Add a new cat to the backend
-  const addCat = async (event) => {
-    event.preventDefault();
+  const addCat = async () => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('age', age);
+    formData.append('breed', breed);
+    formData.append('image', image);
 
     try {
-      const response = await axios.post('http://localhost:3001/cats/post', {
-        name,
-        age,
-        breed
+      const response = await axios.post('http://localhost:3001/cats/post', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
-
-      // Add the new cat to the list of cats
-      setCats([...cats, { id: response.data.id, name, age, breed }]);
-      // Clear the form inputs
-      setName('');
-      setAge('');
-      setBreed('');
+      console.log(response.data);
     } catch (error) {
-      console.error('Error adding cat: ' + error.message);
+      console.error(error);
     }
   };
 
   return (
     <div>
-      <h1>Add a new cat</h1>
-      <form onSubmit={addCat}>
-        <div className="mb-3">
-          <label htmlFor="firstName">Cat Name</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="cat name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="firstName">Age</label>
-          <input
-            type="number"
-            className="form-control"
-            placeholder="cat age"
-            value={age}
-            onChange={(e) => setAge(parseInt(e.target.value))}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="firstName">Breed</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="cat breed"
-            value={breed}
-            onChange={(e) => setBreed(e.target.value)}
-          />
-        </div>
-        <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
-            Add Cat
-          </button>
-        </div>
-      </form>
+      <h2>Add a Cat</h2>
+      <div className="mb-3">
+        <label htmlFor="name">Name</label>
+        <input type="text" className="form-control" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="age">Age</label>
+        <input type="text" className="form-control" id="age" value={age} onChange={(e) => setAge(e.target.value)} />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="breed">Breed</label>
+        <input type="text" className="form-control" id="breed" value={breed} onChange={(e) => setBreed(e.target.value)} />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="image">Image</label>
+        <input
+          type="file"
+          className="form-control"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+      </div>
+      <button className="btn btn-primary" onClick={addCat}>Add Cat</button>
     </div>
   );
-};
+}
 
-export default Create_cat;
+export default AddCat;
