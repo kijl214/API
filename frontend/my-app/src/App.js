@@ -11,14 +11,19 @@ import Delete from './page/Delete_cat';
 
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  
+  const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn') === 'true');
 
+  // Update the state of loggedIn and also store it in localStorage
   const handleLogin = () => {
     setLoggedIn(true);
+    localStorage.setItem('loggedIn', 'true');
   };
-
+  
+  // Clear the state of loggedIn and also remove it from localStorage
   const handleLogout = () => {
     setLoggedIn(false);
+    localStorage.removeItem('loggedIn');
   };
 
   return (

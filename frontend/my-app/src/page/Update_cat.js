@@ -6,6 +6,7 @@ const UpdateCat = () => {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [breed, setBreed] = useState('');
+  const [image, setImage] = useState(null);
   const [selectedCatId, setSelectedCatId] = useState(null);
 
   useEffect(() => {
@@ -20,7 +21,11 @@ const UpdateCat = () => {
 
   // Update the selected cat in the backend
   const updateCat = () => {
-    axios.put(`http://localhost:3001/cats/put/${selectedCatId}`, { name, age, breed })
+    axios.put(`http://localhost:3001/cats/put/${selectedCatId}`, {name,age,breed,image}, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
       .then(response => {
         // Update the list of cats with the updated cat
         const updatedCats = cats.map(cat => {
@@ -35,6 +40,7 @@ const UpdateCat = () => {
         setName('');
         setAge('');
         setBreed('');
+        setImage('');
         setSelectedCatId(null);
       })
       .catch(error => {
@@ -67,21 +73,29 @@ const UpdateCat = () => {
           {selectedCatId && (
             <form onSubmit={updateCat}>
               <div className="mb-3">
-                <label htmlFor="firstName">Cat Name</label>
+                <label>Cat Name</label>
                 <input type="text" className="form-control" placeholder="cat name" value={name} onChange={e => setName(e.target.value)} />       
               </div>
               <div className="mb-3">
-                <label htmlFor="firstName">Age</label>
+                <label>Age</label>
                 <input type="number" className="form-control" placeholder="cat age" value={age} onChange={e => setAge(parseInt(e.target.value))} />       
               </div>
               <div className="mb-3">
-                <label htmlFor="firstName">Breed</label>
+                <label>Breed</label>
                 <input type="text" className="form-control" placeholder="cat breed" value={breed} onChange={e => setBreed(e.target.value)} />       
+              </div>
+              <div className="mb-3">
+                <label>Image</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
               </div>
 
 
 
-              
               <div className="d-grid">
                 <button type="submit" className="btn btn-primary">
                   Update Cat

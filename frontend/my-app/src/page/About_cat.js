@@ -40,21 +40,6 @@ const About_cat = () => {
   // Get a list of unique cat breeds for the breed select list
   const uniqueBreeds = [...new Set(cats.map(cat => cat.breed))];
 
-
-  // Convert the selected file to base64
-  function convertFile(files: FileList | null) {
-
-      const fileRef = files[0] || '';
-      const fileType: string = fileRef.type || '';
-      console.log('This file upload is of type:', fileType);
-      const reader = new FileReader();
-      reader.readAsBinaryString(fileRef);
-      reader.onload = (ev: any) => {
-        // convert it to base64
-        return(`data:${fileType};base64,${btoa(ev.target.result)}`);
-      };
-  }
-
   return (
     <div>
       <h1>Cats</h1>
