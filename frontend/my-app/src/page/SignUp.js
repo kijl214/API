@@ -37,7 +37,7 @@ const SignUp = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3>Sign Up</h3>
+      <h3>Staff Sign Up</h3>
       {error && (
         <div className="alert alert-danger" role="alert">
           {error}

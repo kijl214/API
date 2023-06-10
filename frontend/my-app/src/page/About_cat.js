@@ -6,6 +6,8 @@ const About_cat = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [breedFilter, setBreedFilter] = useState('');
   const [ageFilter, setAgeFilter] = useState('');
+  const [favouritesCat, setFavouritesCat] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Fetch all cats from the backend
   useEffect(() => {
@@ -16,6 +18,12 @@ const About_cat = () => {
       .catch(error => {
         console.error('Error fetching cats: ' + error.message);
       });
+  }, []);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const userLoggedIn = localStorage.getItem('userloggedIn');
+    setIsLoggedIn(userLoggedIn === 'true');
   }, []);
 
   // Filter the list of cats based on the search term, breed filter, and age filter
@@ -39,24 +47,30 @@ const About_cat = () => {
 
   // Get a list of unique cat breeds for the breed select list
   const uniqueBreeds = [...new Set(cats.map(cat => cat.breed))];
+  const handleAddToFavourites = (cat) => {
+    const item = { id: cat.id, name: cat.name, age:cat.age, breed:cat.breed, picture:cat.picture};
+    const Cat = [...favouritesCat, item];
+    localStorage.setItem('favouritesCat', JSON.stringify(Cat));
+    setFavouritesCat(Cat);
+  };
 
   return (
     <div>
       <h1>Cats</h1>
       <div className="row mb-3">
         <div className="col">
-          <label htmlFor="searchTerm" className="form-label">Search by ID or Name</label>
+          <label className="form-label">Search by ID or Name</label>
           <input type="text" className="form-control" id="searchTerm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
         <div className="col">
-          <label htmlFor="breedFilter" className="form-label">Breed</label>
+          <label className="form-label">Breed</label>
           <select className="form-select" id="breedFilter" value={breedFilter} onChange={(e) => setBreedFilter(e.target.value)}>
             <option value="">All Breeds</option>
             {uniqueBreeds.map(breed => <option key={breed} value={breed}>{breed}</option>)}
           </select>
         </div>
         <div className="col">
-          <label htmlFor="ageFilter" className="form-label">Age</label>
+          <label className="form-label">Age</label>
           <select className="form-select" id="ageFilter" value={ageFilter} onChange={(e) => setAgeFilter(e.target.value)} style={{ width: '200px' }}>
             <option value="">All Ages</option>
             <option value="lessThan5">Less than 5 years old</option>
@@ -80,9 +94,18 @@ const About_cat = () => {
                 <tr><td>Name:</td><td>{cat.name}</td></tr>
                 <tr><td>Years old:</td><td>{cat.age}</td></tr>
                 <tr><td>Breed:</td><td>{cat.breed}</td></tr>
-                <tr>
-
-                </tr>
+                {isLoggedIn &&
+                  <tr>
+                    <td>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleAddToFavourites(cat)}
+                      >
+                        Add to Favourites
+                      </button>
+                    </td>
+                  </tr>
+                }
               </tbody>
             </table>
           </li>
@@ -93,7 +116,3 @@ const About_cat = () => {
 };
 
 export default About_cat;
-
-
-
-
