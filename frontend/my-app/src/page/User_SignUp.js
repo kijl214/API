@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
@@ -9,6 +10,9 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,67 +37,91 @@ const SignUp = () => {
     }
   };
 
+  const GoogleSignup = useGoogleLogin({
+    onSuccess: codeResponse => axios.post('http://localhost:3001/user/signup/google', {
+      codeResponse
+    })
+  });
+
+
+
+
+
+
+
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>User Sign Up</h3>
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
-      <div className="mb-3">
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          className="form-control"
-          id="username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          placeholder="Username"
-        />
+  <form onSubmit={handleSubmit}>
+    <h3>User Sign Up</h3>
+    {error && (
+      <div className="alert alert-danger" role="alert">
+        {error}
       </div>
-      <div className="mb-3">
-        <label htmlFor="email">Email address</label>
-        <input
-          type="email"
-          className="form-control"
-          id="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="Enter email"
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          placeholder="Enter password"
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input
-          type="password"
-          className="form-control"
-          id="confirmPassword"
-          value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.target.value)}
-          placeholder="Confirm password"
-        />
-      </div>
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Sign Up
-        </button>
-      </div>
-      <p className="forgot-password text-right">
-        Already registered <a href="/sign-in">sign in?</a>
-      </p>
-    </form>
+    )}
+    <div className="mb-3">
+      <label htmlFor="username">Username</label>
+      <input
+        type="text"
+        className="form-control"
+        id="username"
+        value={username}
+        onChange={(event) => setUsername(event.target.value)}
+        placeholder="Username"
+      />
+    </div>
+    <div className="mb-3">
+      <label htmlFor="email">Email address</label>
+      <input
+        type="email"
+        className="form-control"
+        id="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        placeholder="Enter email"
+      />
+    </div>
+    <div className="mb-3">
+      <label htmlFor="password">Password</label>
+      <input
+        type="password"
+        className="form-control"
+        id="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        placeholder="Enter password"
+      />
+    </div>
+    <div className="mb-3">
+      <label htmlFor="confirmPassword">Confirm Password</label>
+      <input
+        type="password"
+        className="form-control"
+        id="confirmPassword"
+        value={confirmPassword}
+        onChange={(event) => setConfirmPassword(event.target.value)}
+        placeholder="Confirm password"
+      />
+    </div>
+    <div className="d-grid">
+      <button type="submit" className="btn btn-primary">
+        Sign Up
+      </button>
+    </div>
+    <p className="forgot-password text-right">
+      Already registered <a href="/sign-in">sign in?</a>
+    </p>
+
+
+    <button onClick={(event) => {
+      event.preventDefault();
+      GoogleSignup();
+    }}>
+      Sign up with Google
+    </button>
+
+  </form>
+
+
   );
 };
 

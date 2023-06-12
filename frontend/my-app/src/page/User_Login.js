@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = ({userhandleLogin}) => {
   const [username, setUsername] = useState('');
@@ -21,6 +22,39 @@ const Login = ({userhandleLogin}) => {
     setRememberMe(event.target.checked);
   };
 
+
+  const Googleuserlogin = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      try {
+        // Send a POST request to the server to log in the user with Google
+        const response = await axios.post('http://localhost:3001/user/login/google', {
+          codeResponse
+        });
+  
+        // If the login is successful, save the token and user data to local storage
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+  
+        // If the "remember me" checkbox is checked, save the token and user data to session storage
+        if (rememberMe) {
+          sessionStorage.setItem('token', response.data.token);
+          sessionStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+        userhandleLogin();
+        // Navigate the user to the home page
+        navigate('/about-cat');
+      } catch (error) {
+        // If there's an error, set the error state to display the error message to the user
+        setError(error.response.data.error);
+      }
+    },
+    onFailure: (error) => {
+      // If there's an error, set the error state to display the error message to the user
+      setError(error);
+    }
+  });
+  
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -42,7 +76,7 @@ const Login = ({userhandleLogin}) => {
       }
       userhandleLogin();
       // Navigate the user to the home page
-      navigate('/create-cat');
+      navigate('/about-cat');
     } catch (error) {
       // If there's an error, set the error state to display the error message to the user
       setError(error.response.data.error);
@@ -101,7 +135,20 @@ const Login = ({userhandleLogin}) => {
       <p className="forgot-password text-right">
         Forgot <a href="/forgot-password">password?</a>
       </p>
+      <div className='spacer'></div>
+
+      <div id="SignInButton">
+      <button onClick={(event) => {
+      event.preventDefault();
+      Googleuserlogin();
+    }}>
+        Log In Using Google
+      </button>
+      </div>
     </form>
+
+
+
   );
 };
 

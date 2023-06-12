@@ -14,6 +14,7 @@ import UserSignUp from './page/User_SignUp';
 
 
 function App() {
+
   
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn') === 'true');
   const [userloggedIn, setuserLoggedIn] = useState(localStorage.getItem('userloggedIn') === 'true');
@@ -122,6 +123,7 @@ function App() {
               <Route path="/" element={<Login handleLogin={handleLogin} />} />
               <Route path="/sign-in" element={<Login handleLogin={handleLogin} />} />
               <Route path="/about-cat" element={<About />} />
+
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/favourites" element={<Favourites />} />
               <Route path="/user-sign-in" element={<UserLogin userhandleLogin={userhandleLogin} />} />
