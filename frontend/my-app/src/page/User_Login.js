@@ -6,7 +6,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 const Login = ({userhandleLogin}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -18,31 +18,24 @@ const Login = ({userhandleLogin}) => {
     setPassword(event.target.value);
   };
 
-  const handleRememberMeChange = (event) => {
-    setRememberMe(event.target.checked);
-  };
+
 
 
   const Googleuserlogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       try {
         // Send a POST request to the server to log in the user with Google
-        const response = await axios.post('http://localhost:3001/user/login/google', {
-          codeResponse
-        });
-  
-        // If the login is successful, save the token and user data to local storage
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-  
-        // If the "remember me" checkbox is checked, save the token and user data to session storage
-        if (rememberMe) {
-          sessionStorage.setItem('token', response.data.token);
-          sessionStorage.setItem('user', JSON.stringify(response.data.user));
-        }
+        const response = await axios.post('http://localhost:3001/user/login/google', {codeResponse})      
+           
+        localStorage.setItem('User', response.data[0].id);
+
         userhandleLogin();
         // Navigate the user to the home page
+
         navigate('/about-cat');
+
+
+
       } catch (error) {
         // If there's an error, set the error state to display the error message to the user
         setError(error.response.data.error);
@@ -65,15 +58,8 @@ const Login = ({userhandleLogin}) => {
         password
       });
 
-      // If the login is successful, save the token and user data to local storage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('User', response.data[0].id);
 
-      // If the "remember me" checkbox is checked, save the token and user data to session storage
-      if (rememberMe) {
-        sessionStorage.setItem('token', response.data.token);
-        sessionStorage.setItem('user', JSON.stringify(response.data.user));
-      }
       userhandleLogin();
       // Navigate the user to the home page
       navigate('/about-cat');
@@ -113,20 +99,7 @@ const Login = ({userhandleLogin}) => {
           placeholder="Enter password"
         />
       </div>
-      <div className="mb-3">
-        <div className="custom-control custom-checkbox">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            id="rememberMe"
-            checked={rememberMe}
-            onChange={handleRememberMeChange}
-          />
-          <label className="custom-control-label" htmlFor="rememberMe">
-            Remember me
-          </label>
-        </div>
-      </div>
+
       <div className="d-grid">
         <button type="submit" className="btn btn-primary">
           Submit

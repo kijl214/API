@@ -26,20 +26,12 @@ const Login = ({handleLogin}) => {
 
     try {
       // Send a POST request to the server to log in the user
-      const response = await axios.post('http://localhost:3001/staff/login', {
-        username,
-        password
-      });
+      axios.post('http://localhost:3001/staff/login', {username,password})
+      .then(response => {
+        localStorage.setItem('Staff', response.data[0].id);
+      })
 
-      // If the login is successful, save the token and user data to local storage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      // If the "remember me" checkbox is checked, save the token and user data to session storage
-      if (rememberMe) {
-        sessionStorage.setItem('token', response.data.token);
-        sessionStorage.setItem('user', JSON.stringify(response.data.user));
-      }
       handleLogin();
       // Navigate the user to the home page
       navigate('/create-cat');

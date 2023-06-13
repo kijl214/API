@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const About_cat = () => {
@@ -8,6 +9,7 @@ const About_cat = () => {
   const [ageFilter, setAgeFilter] = useState('');
   const [favouritesCat, setFavouritesCat] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch all cats from the backend
   useEffect(() => {
@@ -54,6 +56,14 @@ const About_cat = () => {
     setFavouritesCat(Cat);
   };
 
+
+
+  const handleGoToChatRoom = (cat) => {
+    localStorage.setItem('selectedCat', JSON.stringify(cat));
+    // Navigate to chat room component
+    navigate('/chat-room');
+  }
+
   return (
     <div>
       <h1>Cats</h1>
@@ -82,6 +92,7 @@ const About_cat = () => {
       </div>
       <ul>
         {filteredCats.map(cat => (
+          <div>
           <li key={cat.id}>
             <table>
             <thead>
@@ -90,10 +101,16 @@ const About_cat = () => {
             </tr>
             </thead>
               <tbody>
-                <tr><td>No:</td><td>{cat.id}</td></tr>
-                <tr><td>Name:</td><td>{cat.name}</td></tr>
-                <tr><td>Years old:</td><td>{cat.age}</td></tr>
-                <tr><td>Breed:</td><td>{cat.breed}</td></tr>
+                <tr>No:  {cat.id}</tr>
+                <tr>Name:  {cat.name}</tr>
+                <tr>Years old:  {cat.age}</tr>
+                <tr>Breed:  {cat.breed}</tr>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleGoToChatRoom(cat)}
+                >
+                  Talk the cat with us
+                </button>
                 {isLoggedIn &&
                   <tr>
                     <td>
@@ -106,9 +123,17 @@ const About_cat = () => {
                     </td>
                   </tr>
                 }
+                
               </tbody>
             </table>
           </li>
+          </div>
+
+
+
+
+
+
         ))}
       </ul>
     </div>

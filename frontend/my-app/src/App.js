@@ -11,6 +11,7 @@ import Delete from './page/Delete_cat';
 import Favourites from './page/Favourites_List';
 import UserLogin from './page/User_Login';
 import UserSignUp from './page/User_SignUp';
+import ChatRoom from './page/Chat_room';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
   const handleLogout = () => {
     setLoggedIn(false);
     localStorage.removeItem('loggedIn');
+    localStorage.removeItem('Staff');
   };
     // Update the state of loggedIn and also store it in localStorage
     const userhandleLogin = () => {
@@ -40,6 +42,7 @@ function App() {
     const userhandleLogout = () => {
       setuserLoggedIn(false);
       localStorage.removeItem('userloggedIn');
+      localStorage.removeItem('User');
     };
 
   return (
@@ -126,6 +129,7 @@ function App() {
 
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/favourites" element={<Favourites />} />
+              <Route path="/chat-room" element={<ChatRoom />} />
               <Route path="/user-sign-in" element={<UserLogin userhandleLogin={userhandleLogin} />} />
               <Route path="/user-sign-up" element={<UserSignUp />} />
               {loggedIn ? (
