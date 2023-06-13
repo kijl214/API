@@ -29,6 +29,7 @@ const Login = ({handleLogin}) => {
       axios.post('http://localhost:3001/staff/login', {username,password})
       .then(response => {
         localStorage.setItem('Staff', response.data[0].id);
+        localStorage.setItem('Username', response.data[0].username);
       })
 
 

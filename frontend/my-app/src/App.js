@@ -31,6 +31,7 @@ function App() {
     setLoggedIn(false);
     localStorage.removeItem('loggedIn');
     localStorage.removeItem('Staff');
+    localStorage.removeItem('Username');
   };
     // Update the state of loggedIn and also store it in localStorage
     const userhandleLogin = () => {
@@ -43,6 +44,7 @@ function App() {
       setuserLoggedIn(false);
       localStorage.removeItem('userloggedIn');
       localStorage.removeItem('User');
+      localStorage.removeItem('Username');
     };
 
   return (

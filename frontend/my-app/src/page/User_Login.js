@@ -28,6 +28,7 @@ const Login = ({userhandleLogin}) => {
         const response = await axios.post('http://localhost:3001/user/login/google', {codeResponse})      
            
         localStorage.setItem('User', response.data[0].id);
+        localStorage.setItem('Username', response.data[0].username);
 
         userhandleLogin();
         // Navigate the user to the home page
@@ -59,6 +60,7 @@ const Login = ({userhandleLogin}) => {
       });
 
       localStorage.setItem('User', response.data[0].id);
+      localStorage.setItem('Username', response.data[0].username);
 
       userhandleLogin();
       // Navigate the user to the home page
