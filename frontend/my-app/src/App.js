@@ -12,6 +12,7 @@ import Favourites from './page/Favourites_List';
 import UserLogin from './page/User_Login';
 import UserSignUp from './page/User_SignUp';
 import ChatRoom from './page/Chat_room';
+import Breedhelper from './page/Breed_helper';
 
 
 function App() {
@@ -134,6 +135,7 @@ function App() {
               <Route path="/chat-room" element={<ChatRoom />} />
               <Route path="/user-sign-in" element={<UserLogin userhandleLogin={userhandleLogin} />} />
               <Route path="/user-sign-up" element={<UserSignUp />} />
+              <Route path="/breed-helper" element={<Breedhelper />} />
               {loggedIn ? (
                 <React.Fragment>
                   <Route path="/create-cat" element={<Create />} />

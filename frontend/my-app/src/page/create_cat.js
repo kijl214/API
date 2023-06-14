@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './all.css';
 
 function AddCat() {
@@ -8,6 +9,7 @@ function AddCat() {
   const [breed, setBreed] = useState('');
   const [image, setImage] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
   const addCat = async () => {
     const formData = new FormData();
@@ -28,6 +30,15 @@ function AddCat() {
       console.error(error);
     }
   };
+
+  const handleGoToBreedhelper =() => {
+    // Navigate to breed helper 
+    navigate('/breed-helper');
+  }
+ 
+
+
+
 
   return (
     <div>
@@ -51,6 +62,7 @@ function AddCat() {
             <option value="Burmese">Burmese</option>
           </select>
       </div>
+      <button onClick={handleGoToBreedhelper()}>breed selection helper</button>
       <div className="mb-3">
         <label>Image</label>
         <input
