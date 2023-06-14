@@ -25,6 +25,10 @@ function AddCat() {
         }
       });
       console.log(response.data);
+      
+
+
+
       setSuccessMessage('Cat added successfully!');
     } catch (error) {
       console.error(error);
@@ -62,7 +66,12 @@ function AddCat() {
             <option value="Burmese">Burmese</option>
           </select>
       </div>
-      <button onClick={handleGoToBreedhelper()}>breed selection helper</button>
+      <button onClick={(event) => {
+      event.preventDefault();
+      handleGoToBreedhelper();
+    }}>
+        breed selection helper
+        </button>
       <div className="mb-3">
         <label>Image</label>
         <input

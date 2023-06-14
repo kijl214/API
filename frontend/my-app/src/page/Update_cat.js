@@ -82,7 +82,19 @@ const UpdateCat = () => {
               </div>
               <div className="mb-3">
                 <label>Breed</label>
-                <input type="text" className="form-control" placeholder="cat breed" value={breed} onChange={e => setBreed(e.target.value)} />       
+
+
+  
+                <select className="form-select" id="breed" value={breed} onChange={(e) => setBreed(e.target.value)}>
+                  <option value="">Choose breed</option>
+                  <option value="British Shorthair">British Shorthair</option>
+                  <option value="Exotic Shorthair">Exotic Shorthair</option>
+                  <option value="American Shorthair">American Shorthair</option>
+                  <option value="Burmese">Burmese</option>
+                </select>
+
+
+
               </div>
               <div className="mb-3">
                 <label>Image</label>
