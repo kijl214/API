@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import axios from 'axios';
+const axios = require('axios');
 
 const Breedhelper = ()=> {
     const [breeds, setBreeds] = useState([]);
@@ -10,7 +10,7 @@ const Breedhelper = ()=> {
       const getBreeds = async () => {
         try {
           const response = await axios.get('https://api.thecatapi.com/v1/breeds');
-          const breeds = response.data.map((breed: any) => ({
+          const breeds = response.data.map((breed) => ({
             id: breed.id,
             name: breed.name
           }));
@@ -23,7 +23,7 @@ const Breedhelper = ()=> {
     }, []);
 
 
-    const handleSelectChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange = async (event) => {
         setSelectedBreed(event.target.value);
         try {
           const response = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${event.target.value}`);
