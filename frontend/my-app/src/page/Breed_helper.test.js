@@ -12,13 +12,6 @@ describe('Breedhelper Component', () => {
     { id: '3', name: 'Breed 3' },
   ];
 
-  const breedImageData = {
-    data: [
-      {
-        url: 'https://example.com/image.jpg',
-      },
-    ],
-  };
 
   test('Renders the component correctly', async () => {
     axios.get.mockResolvedValueOnce({ data: breedsData });
