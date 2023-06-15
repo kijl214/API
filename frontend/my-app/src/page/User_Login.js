@@ -51,23 +51,27 @@ const Login = ({userhandleLogin}) => {
   
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
       // Send a POST request to the server to log in the user
       const response = await axios.post('http://localhost:3001/user/login', {
         username,
         password
-      });
-
-      localStorage.setItem('User', response.data[0].id);
-      localStorage.setItem('Username', response.data[0].username);
-
+      });   
+      localStorage.setItem('User', response.data.id);
+      localStorage.setItem('Username', response.data.username);
+  
       userhandleLogin();
       // Navigate the user to the home page
       navigate('/about-cat');
     } catch (error) {
-      // If there's an error, set the error state to display the error message to the user
-      setError(error.response.data.error);
+      if (error.response) {
+        // If there's an error response from the server, set the error state to display the error message to the user
+        setError(error.response.data.error);
+      } else {
+        // If there's no error response from the server, display a generic error message
+        setError('An error occurred while logging in. Please try again later.');
+      }
     }
   };
 

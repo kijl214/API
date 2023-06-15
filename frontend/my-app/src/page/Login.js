@@ -26,11 +26,11 @@ const Login = ({handleLogin}) => {
 
     try {
       // Send a POST request to the server to log in the user
-      axios.post('http://localhost:3001/staff/login', {username,password})
-      .then(response => {
-        localStorage.setItem('Staff', response.data[0].id);
-        localStorage.setItem('Username', response.data[0].username);
-      })
+      const response = await axios.post('http://localhost:3001/staff/login', {username,password})
+
+      localStorage.setItem('Staff', response.data.id);
+      localStorage.setItem('Username', response.data.username);
+
 
 
       handleLogin();
