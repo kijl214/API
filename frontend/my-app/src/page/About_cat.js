@@ -7,7 +7,6 @@ const About_cat = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [breedFilter, setBreedFilter] = useState('');
   const [ageFilter, setAgeFilter] = useState('');
-  const [favouritesCat, setFavouritesCat] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const userid = localStorage.getItem('User');
   const navigate = useNavigate();
