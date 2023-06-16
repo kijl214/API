@@ -1,22 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const FavouritesCat = () => {
-  const [favouritesCat, setFavouritesCat] = useState(JSON.parse(localStorage.getItem('favouritesCat')) || []);
+const Cats = () => {
 
-  const handleDelete = (id) => {
-    const updatedList = favouritesCat.filter(cat => cat.id !== id);
-    localStorage.setItem('favouritesCat', JSON.stringify(updatedList));
-    setFavouritesCat(updatedList);
-  }
+  const [cats, setCats] = useState([]);
+  const user_id = localStorage.getItem('User');
+
+  // Fetch all cats from the backend
+  useEffect(() => {
+    axios.post('http://localhost:3001/cats/favourite_cat/get', {user_id})
+      .then(response => {
+        setCats(response.data);
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching cats: ' + error.message);
+      });
+  }, []);
+
+  const handleDelete = (catId) => {
+    axios.delete(`http://localhost:3001/cats/favourite_cat/delete/${catId}`)
+      .then(response => {
+        setCats(cats.filter(cat => cat.id !== catId));
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Error deleting cat: ' + error.message);
+      });
+  };
 
   return (
     <div>
       <h1>Favourite Cats</h1>
-      {favouritesCat.length === 0 ? (
+      {cats.length === 0 ? (
         <p>You have no favourite cats yet.</p>
       ) : (
         <ul>
-          {favouritesCat.map(cat => (
+          {cats.map(cat => (
             <li key={cat.id}>
               <table>
                 <thead>
@@ -25,7 +45,7 @@ const FavouritesCat = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>No:</td><td>{cat.id}</td></tr>
+                  <tr><td>No:</td><td>{cat.catid}</td></tr>
                   <tr><td>Name:</td><td>{cat.name}</td></tr>
                   <tr><td>Years old:</td><td>{cat.age}</td></tr>
                   <tr><td>Breed:</td><td>{cat.breed}</td></tr>
@@ -44,4 +64,4 @@ const FavouritesCat = () => {
   );
 };
 
-export default FavouritesCat;
+export default Cats;

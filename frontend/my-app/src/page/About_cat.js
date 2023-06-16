@@ -9,6 +9,7 @@ const About_cat = () => {
   const [ageFilter, setAgeFilter] = useState('');
   const [favouritesCat, setFavouritesCat] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userid = localStorage.getItem('User');
   const navigate = useNavigate();
 
   // Fetch all cats from the backend
@@ -49,11 +50,39 @@ const About_cat = () => {
 
   // Get a list of unique cat breeds for the breed select list
   const uniqueBreeds = [...new Set(cats.map(cat => cat.breed))];
-  const handleAddToFavourites = (cat) => {
-    const item = { id: cat.id, name: cat.name, age:cat.age, breed:cat.breed, picture:cat.picture};
-    const Cat = [...favouritesCat, item];
-    localStorage.setItem('favouritesCat', JSON.stringify(Cat));
-    setFavouritesCat(Cat);
+  const handleAddToFavourites = async (cat) => {
+    const formData = new FormData();
+    formData.append('catid', cat.id);
+    formData.append('userid', userid);
+    formData.append('name', cat.name);
+    formData.append('age', cat.age);
+    formData.append('breed', cat.breed);
+  
+    // Check if the image property exists and has a value
+    if (cat.picture) {
+      // Convert the base64 image to a blob
+      const byteCharacters = atob(cat.picture.split(',')[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+  
+      formData.append('image', blob);
+    }
+  
+    try {
+      const response = await axios.post('http://localhost:3001/cats/favourite_cat/post', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log(response.data);
+  
+    } catch (error) {
+      console.error(error);
+    }
   };
 
 
